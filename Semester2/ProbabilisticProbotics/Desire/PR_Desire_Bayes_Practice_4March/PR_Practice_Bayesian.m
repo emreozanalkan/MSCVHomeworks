@@ -1,0 +1,13 @@
+close all;
+clear;
+clc;
+
+weatherTransitionMatrix = [0.8, 0.2, 0.0; 
+                           0.4, 0.4, 0.2;
+                           0.2, 0.6, 0.2];
+
+numberOfDays = 3;
+                       
+initialCondition = [1; 0; 0];
+                       
+days = weather_simulation(weatherTransitionMatrix, numberOfDays, initialCondition);

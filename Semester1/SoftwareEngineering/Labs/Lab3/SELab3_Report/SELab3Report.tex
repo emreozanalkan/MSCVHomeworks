@@ -1,0 +1,606 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{anysize}
+\usepackage{color}
+\usepackage{xcolor}
+
+\usepackage{listings}
+\lstset{
+	language=C++,                	% choose the language of the code
+	basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+	numbers= left,                 	% where to put the line-numbers
+	numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+	stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,           		% adds a frame around the code
+	tabsize=2,          			% sets default tabsize to 2 spaces
+	captionpos=t,          			% sets the caption-position to bottom (t=top, b=bottom)
+	breaklines=true,        		% sets automatic line breaking
+	breakatwhitespace=false,    	% sets if automatic breaks should only happen at whitespace
+	escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+
+
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox[c]{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}{10pt}
+
+\marginsize{3cm}{2cm}{2cm}{2cm}
+
+\title{Software Engineering\\
+		Lab 3 Report}
+\author{Emre Ozan Alkan\\
+		\{emreozanalkan@gmail.com\}\\
+		MSCV-5}
+\date{29 October 2013}
+
+\begin{document}
+\maketitle
+
+\section{Dynamic allocation}
+
+Dynamically allocating an array of n integers.
+
+\begin{lstlisting}[label=lab3.1,caption=Dynamic Allocation]	
+/*
+ * Function: AllocateArray
+ * -----------------------------
+ * Dynamically allocates and array of n integers
+ * and returning pointer to the first element of array
+ *
+ * n: Interger number as size of array
+ *
+ * returns: integer array pointer pointing to first element
+ * prints: nothing
+ */
+int* AllocateArray(int n)
+{
+    return new (std::nothrow) int[n];
+}
+\end{lstlisting}
+
+
+\section{Array deletion}
+
+Deleteing the array of n integers with given pointer pointing first element.
+
+\begin{lstlisting}[label=lab3.2,caption=Array Deletion]
+/*
+ * Function: DeleteArray
+ * -----------------------------
+ * Deleting the integer array given by user with pointer
+ *
+ * array: Interger pointer to array pointing first element
+ *
+ * returns: nothing
+ * prints: nothing
+ */
+void DeleteArray(int *array)
+{
+    delete [] array;
+    array = 0;
+    return;
+}
+\end{lstlisting}		
+
+
+\section{Array initialisation using pointers}
+
+Initializating an array of n integers with the given pointer by user pointing to the frist element. All values assigned randomly between 0-99.
+
+\begin{lstlisting}[label=lab3.3,caption=Initing Randomly]
+/*
+ * Function: InitArray
+ * -----------------------------
+ * Initialising an integer array with size n
+ * with random values between 0 and 99
+ *
+ * array: Interger pointer to array pointing first element
+ * n: Integer number size of the array
+ *
+ * returns: nothing
+ * prints: nothing
+ */
+void InitArray(int *array, int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        int rndNumber = rand() % 100;
+#if _USE_POINTER_ARITHMETIC_
+        *(array + i) = rndNumber;
+#else
+        array[i] = rndNumber;
+#endif // _USE_POINTER_ARITHMETIC_
+    }
+
+    return;
+}
+\end{lstlisting}	
+
+
+\section{On displaying an array using its pointer}
+
+Displaying the frist n values of an array using the given pointer pointing first element.
+
+\begin{lstlisting}[label=lab3.4,caption=Displaying Array]
+/*
+ * Function: DisplayArray
+ * -----------------------------
+ * Displays the n values of an array using the pointer
+ * to its first element
+ *
+ * array: Interger pointer to array pointing first element
+ * n: Integer number size of the array
+ *
+ * returns: nothing
+ * prints: values of array size n
+ */
+void DisplayArray(int *array, int n)
+{
+    // http://www.cplusplus.com/reference/iterator/ostream_iterator/
+    // std::ostream_iterator<int> out_it (std::cout, "\n");
+    // std::copy ( array, array + n, out_it );
+
+    for(int i = 0; i < n; i++)
+    {
+#if _USE_POINTER_ARITHMETIC_
+        std::cout<<(i+1)<<"th element: "<<*(array+i)<<std::endl;
+#else
+        std::cout<<(i+1)<<"th element: "<<array[i]<<std::endl;
+#endif // _USE_POINTER_ARITHMETIC_
+
+    }
+
+    return;
+}
+\end{lstlisting}	
+
+
+
+\section{Reverse}
+
+Function to reverse the order of the array with given array pointer pointing to first element.
+
+\begin{lstlisting}[label=lab3.5,caption=Reversing Array]
+/*
+ * Function: ReverseArray
+ * -----------------------------
+ * Reverses the order of the given array by size n
+ *
+ * array: Interger pointer to array pointing first element
+ * n: Integer number size of the array
+ *
+ * returns: nothing
+ * prints: nothing
+ */
+void ReverseArray(int *array, int n)
+{
+    // http://www.cplusplus.com/reference/algorithm/reverse/
+    //std::reverse(array, array + n);
+
+    int temp = 0;
+
+    for(int* start = array, *end = array + (n - 1); start < end; start++, end--)
+    {
+        temp = *start;
+        *start = *end;
+        *end = temp;
+    }
+
+    return;
+}
+\end{lstlisting}	
+
+
+
+\section{Swapping values of arrays represented by pointers}
+
+Swapping all the values of two same size arrays represented by two pointers given by user pointing first element/
+
+\begin{lstlisting}[label=lab3.6,caption=Swapping Two Array]
+/*
+ * Function: SwapArrays
+ * -----------------------------
+ * Swaps all the values of two arrays represented by pointers
+ *
+ * array1: Interger pointer to first array pointing to first element
+ * array2: Interger pointer to second array pointing to first element
+ * n: Integer number size of the both arrays
+ *
+ * returns: nothing
+ * prints: nothing
+ */
+void SwapArrays(int *array1, int *array2, int n)
+{
+    //std::swap_ranges(array1, array1 + n, array2);
+
+    int temp = 0;
+
+    for(int i = 0; i < n; i++)
+    {
+#if _USE_POINTER_ARITHMETIC_
+        temp = *(array1 + i);
+        *(array1 + i) = *(array2 + i);
+        *(array2 + i) = temp;
+#else
+        temp = array1[i];
+        array1[i] = array2[i];
+        array2[i] = temp;
+#endif // _USE_POINTER_ARITHMETIC_
+    }
+
+    return;
+}
+\end{lstlisting}	
+
+
+
+\section{On pointers used as function parameters}
+
+Sending pointers to function as value and as pointer reference. Honestly, I didn't know that difference. I needed to find many references and wrote some examples by my self. So function SpanArray2 is changing original pointer address to the end of the function. Before calling these functions, both arrays are printed. After function calls, the array sent to SpanArray2 was not able to print the values because its changed by the function.
+
+\begin{lstlisting}[label=lab3.7,caption=Pointers as Parameters]
+/*
+ * Function: SpanArray1
+ * -----------------------------
+ * Spans the array p with size n
+ *
+ * p: Interger pointer to array pointing to first element
+ * n: Integer number size of the array p
+ *
+ * returns: nothing
+ * prints: nothing
+ */
+void SpanArray1(int *p, const int& n)
+{
+    for(int i = 0; i < n; p++, i++);
+
+    return;
+}
+
+/*
+ * Function: SpanArray2
+ * -----------------------------
+ * Spans the array p with size n
+ * Function getting pointer p as reference where
+ * function is modifying the original pointer to
+ * point end of the array even after function returns
+ *
+ * p: Interger reference to pointer to array pointing to first element
+ * n: Integer number size of the array p
+ *
+ * returns: nothing
+ * prints: nothing.
+ *
+ * References:
+ * http://www.cplusplus.com/forum/beginner/96862/
+ * http://stackoverflow.com/questions/1257507/what-does-this-mean-const-int-var
+ * http://stackoverflow.com/questions/4424793/can-someone-help-me-understand-this-int-pr
+ * http://stackoverflow.com/questions/9340674/does-int-has-any-real-sense
+ */
+void SpanArray2(int* &p, const int& n) // Reference to a pointer
+{
+    for(int i = 0; i < n; p++, i++);
+
+    return;
+}
+\end{lstlisting}	
+
+
+\section{Allocation and deallocation of monodimensional and bidimensional arrays represented by pointers}
+
+Here is the functions to play with matrices; matrix allocation, matrix initializing, displaying matrix and deleting the matrix. Remark: displaying the uninitialized matrix shows random values from memory, because created pointer looks some random place in memory, we see the old memory values.
+
+
+	\subsection{Allocate Matrix}
+		Allocating 2D integer array and returns pointer to it.
+		\begin{lstlisting}[label=lab3.8.1,caption=2D Matrix Allocation]
+/*
+ * Function: AllocateMatrix
+ * -----------------------------
+ * Allocating nxm size matrix and returning pointer of it
+ *
+ * Matrix n x m, n = row, m = cols
+ *
+ * n: Interger number representing size n of a matrix
+ * m: Integer number representing size m of a matrix
+ *
+ * returns: 2D integer pointer array of matrix
+ * prints: nothing
+ */
+int** AllocateMatrix(int n, int m)
+{
+    int **matrix = new int*[n];
+    for (int i = 0; i < n; i++)
+    {
+#if _USE_POINTER_ARITHMETIC_
+        *(matrix + i) = new int[m];
+#else
+        matrix[i] = new int[m];
+#endif // _USE_POINTER_ARITHMETIC_
+
+    }
+
+    return matrix;
+}
+		\end{lstlisting}	
+		
+	\subsection{Initialize Matrix}
+		Initializing 2D integer array with random values between 0-99
+		\begin{lstlisting}[label=lab3.8.2,caption=2D Matrix Initializing]
+/*
+ * Function: InitializeMatrix
+ * -----------------------------
+ * Initializing given matrix with size nxm with random values between 0-99
+ *
+ * Matrix n x m, n = row, m = cols
+ *
+ * matrix: 2D integer pointer to matrix
+ * n: Interger number representing size n of a matrix
+ * m: Integer number representing size m of a matrix
+ *
+ * returns: nothing
+ * prints: nothing
+ */
+void InitializeMatrix(int **matrix, int n, int m)
+{
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < m; j++)
+        {
+#if _USE_POINTER_ARITHMETIC_
+            *(*(matrix + i) + j) = rand() % 100;
+#else
+            matrix[i][j] = rand() % 100;
+#endif // _USE_POINTER_ARITHMETIC_
+
+        }
+
+    return;
+}
+		\end{lstlisting}	
+		
+	\subsection{Delete Matrix}
+		Deleting 2D integer array
+		\begin{lstlisting}[label=lab3.8.3,caption=2D Matrix Deletion]
+/*
+ * Function: DeleteMatrix
+ * -----------------------------
+ * Deleting the given matrix
+ *
+ * Matrix n x m, n = row, m = cols
+ *
+ * matrix: 2D integer pointer to matrix
+ * n: Interger number representing size n of a matrix
+ *
+ * returns: nothing
+ * prints: nothing
+ */
+void DeleteMatrix(int **matrix, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+#if _USE_POINTER_ARITHMETIC_
+        delete [] *(matrix + i);
+#else
+        delete [] matrix[i];
+#endif // _USE_POINTER_ARITHMETIC_
+
+    }
+
+    delete [] matrix;
+    matrix = 0;
+    return;
+}
+		\end{lstlisting}	
+
+	\subsection{Display Matrix}
+		Displaying 2D integer array
+		\begin{lstlisting}[label=lab3.8.4,caption=2D Matrix Display]
+/*
+ * Function: DisplayMatrix
+ * -----------------------------
+ * Displaying the given matrix with sizes n x m
+ *
+ * Matrix n x m, n = row, m = cols
+ *
+ * matrix: 2D integer pointer to matrix
+ * n: Interger number representing size n of a matrix
+ * m: Integer number representing size m of a matrix
+ *
+ * returns: nothing
+ * prints: the values of the matrix
+ */
+void DisplayMatrix(int **matrix, int n, int m)
+{
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+#if _USE_POINTER_ARITHMETIC_
+            std::cout<<*(*(matrix + i) + j)<<" ";
+#else
+            std::cout<<matrix[i][j]<<" ";
+#endif // _USE_POINTER_ARITHMETIC_
+
+        }
+        std::cout<<std::endl;
+    }
+    return;
+}
+		\end{lstlisting}	
+
+
+
+
+\section{A little bit of geometry}
+
+Computing the dot/inner product of the given vectors of any dimension/size.
+
+\begin{lstlisting}[label=lab3.9,caption=Dot Product]
+/*
+ * Function: DotProduct
+ * -----------------------------
+ * Computing the Dot/Inner product of two nDimension vectors
+ *
+ * array1: First nDimensional vector with given type T
+ * array2: Second nDimensional vector with given type T
+ * dimension: integer number representing dimension of the vectors
+ *
+ * returns: Dot Product of the 2 vectors wtih specified type T
+ * prints: nothing
+ */
+template<class T>
+T DotProduct(T *array1, T *array2, int dimension)
+{
+    T dotProduct = 0;
+
+    for(int i = 0; i < dimension; i++)
+    {
+#if _USE_POINTER_ARITHMETIC_
+        dotProduct += *(array1+i) * *(array2 + i);
+#else
+        dotProduct += array1[i] * array2[i];
+#endif // _USE_POINTER_ARITHMETIC_
+    }
+
+    return dotProduct;
+}
+\end{lstlisting}	
+
+
+
+
+\section{Matrix multiplication in the general case}
+
+Multiplying arbitrary size 2 matrix if their size is compatible otherwise printing error.
+
+\begin{lstlisting}[label=lab3.10,caption=Matrix Product]
+/*
+ * Function: MatrixProduct
+ * -----------------------------
+ * Given matrix A and B, calculates multiplication of them and assigns result to C
+ *
+ * Matrix n x m, n = row, m = cols
+ *
+ * matrix1: 2 dimensional integer array representing matrix A
+ * n: integer row size of matrix1
+ * m: integer col size of matrix1
+ * matrix2: 2 dimensional integer array representing matrix B
+ * a: integer row size of matrix2
+ * b: integer col size of matrix2
+ *
+ * returns: 2D integer pointer of matrix of result of the matrix multiplication
+ * prints: Prints error message if matrix sizes are not compatible
+ *
+ * Method Used:
+ * http://en.wikipedia.org/wiki/Loop_tiling
+ * http://msdn.microsoft.com/en-us/library/hh873134.aspx
+ * Original matrix multiplication:
+ *   DO I = 1, M
+ *     DO K = 1, M
+ *       DO J = 1, M
+ *         Z(J, I) = Z(J, I) + X(K, I) * Y(J, K)
+ *
+ */
+int** MatrixProduct(int **matrix1, int n, int m, int **matrix2, int a, int b)
+{
+    if(m != a)
+    {
+        std::cerr<<"First array's column size should be equal with second array's row size"<<std::endl;
+        return 0;
+    }
+
+    int **product = AllocateMatrix(n, b);
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < b; j++){
+            for(int k = 0; k < a; k++){
+#if _USE_POINTER_ARITHMETIC_
+                *(*(product + i) + j) += *(*(matrix1 + i) + k) * *(*(matrix2 + k) + j);
+#else
+                product[i][j] += matrix1[i][k] * matrix2[k][j];
+#endif // _USE_POINTER_ARITHMETIC_
+
+            }
+        }
+    }
+
+    return product;
+}
+\end{lstlisting}	
+
+
+
+\section{Pointers arithmetic}
+
+Redoing everything above without using indexes and offset operator [] was the task. I achieved this by using pre-processors to switch between offsets and pointer arithmetic operations, otherwise implementing all above in new functions etc. would be tough task. \\
+
+In "Lab3.h", I defined my pre-processor to switch between 2 implementation.
+
+\begin{lstlisting}[label=lab3.11,caption=Pointer Arithmetic]
+/*
+ * Question 11: Pointers Arithmetic
+ * -------------------------------
+ * Redo functions with pointer arithmetic without
+ * using indexes and offset operator []
+ *
+ * true: using pointer arithmetic
+ * false: using indexes and offset operator:[]
+ */
+#define _USE_POINTER_ARITHMETIC_ true
+//#define _USE_POINTER_ARITHMETIC_ false
+\end{lstlisting}	
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

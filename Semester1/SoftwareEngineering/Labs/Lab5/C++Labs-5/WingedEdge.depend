@@ -1,0 +1,39 @@
+# depslib dependency file v1.0
+1255017325 source:c:\yohan\mscv\c++\labs\wingededge\wingededge.cpp
+	"WingedEdge.h"
+
+1255018451 c:\yohan\mscv\c++\labs\wingededge\wingededge.h
+	<iostream>
+
+1255017648 source:c:\yohan\mscv\c++\labs\wingededge\exercice.cpp
+	"Exercice.h"
+	<iostream>
+
+1255018571 c:\yohan\mscv\c++\labs\wingededge\exercice.h
+	"WingedEdge.h"
+	<iostream>
+
+1255018272 source:c:\yohan\mscv\c++\labs\wingededge\main.cpp
+	<iostream>
+	"WingedEdge.h"
+	"Exercice.h"
+
+1255020926 source:c:\yohan\mscv\c++\labs\c++labs-5\c++labs-5\wingededge.cpp
+	"WingedEdge.h"
+
+1287131603 c:\yohan\mscv\c++\labs\c++labs-5\c++labs-5\wingededge.h
+	<iostream>
+
+1255021874 source:c:\yohan\mscv\c++\labs\c++labs-5\c++labs-5\main.cpp
+	<iostream>
+	"WingedEdge.h"
+	"Exercice.h"
+
+1287131603 c:\yohan\mscv\c++\labs\c++labs-5\c++labs-5\exercice.h
+	"WingedEdge.h"
+	<iostream>
+
+1255021250 source:c:\yohan\mscv\c++\labs\c++labs-5\c++labs-5\exercice.cpp
+	"Exercice.h"
+	<iostream>
+

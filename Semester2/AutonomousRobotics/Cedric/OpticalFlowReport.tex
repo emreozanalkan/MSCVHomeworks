@@ -1,0 +1,200 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{anysize}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{hyperref}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+%\usepackage{anysize}
+%\usepackage{color}
+%\usepackage{xcolor}
+%\usepackage{hyperref}
+%\usepackage{float}
+%\usepackage{varioref}
+%\usepackage{amsmath, amssymb, amsthm}
+%\usepackage{subfig}
+%\usepackage{lipsum}
+%\usepackage{graphicx}
+%\usepackage{subfigure}
+
+\usepackage{listings}
+\lstset{
+	language=C++,                	% choose the language of the code
+	basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+	numbers= left,                 	% where to put the line-numbers
+	numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+	stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,           		% adds a frame around the code
+	tabsize=2,          			% sets default tabsize to 2 spaces
+	captionpos=t,          			% sets the caption-position to bottom (t=top, b=bottom)
+	breaklines=true,        		% sets automatic line breaking
+	breakatwhitespace=false,    	% sets if automatic breaks should only happen at whitespace
+	escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+
+
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox[c]{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}{10pt}
+
+\marginsize{3cm}{2cm}{2cm}{2cm}
+
+\title{Autonomous Robotics\\
+		Optical Flow Lab Report}
+\author{Emre Ozan Alkan\\
+		\{emreozanalkan@gmail.com\}\\
+		MSCV-5}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+	Optical flow is the signature of the motion in image caused by relative motion of camera or scene objects. Optical flow let us estimate motion, measure the velocities and its direction. Also helpful on video compression. It used by researchers in many applications like object detection and tracking, movement detection, robot navigation, time to collusion calculation, visual odometry and many more.
+
+\section{Methods}
+	There are two convenient and famous methods to implement optical flow algorithms. They are Horn-Schunck and Lucas-Kanade methods. We used this algorithms in lab to understand optical flow. 
+	
+	\subsection{Horn-Schunck}
+		Horn-Schunck method is estimating optical flow using brightness constancy constraint and global constraint of smoothness to solve aperture problem.
+
+\begin{figure}[H]
+\centering
+\subfigure[Alpha: 1, 50 iteration]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/1n.png}
+}
+\subfigure[Alpha: 3, 10 iteration]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/2n.png}
+}\\
+\subfigure[Alpha: 3, 50 iteration]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/3n.png}
+}
+\subfigure[Alpha: 3, 100 iteration]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/4n.png}
+}
+\caption{Horn-Schunck method with different parameters}
+\label{fig:HS}
+\end{figure}
+
+	\subsubsection{Lucas-Kanade}
+		Lucas-Kanade is using affine model for the optical flow. Its one of the widely used differential method. It assumes local neighborhood of the pixels' optical flow is minimally changed. Since it uses neighbor and nearby pixels, it can easily estimate optical flow of ambiguous areas like edges. It is also less sensitive to noise. However since it is local method, it cannot respond to more general uniform regions in the image.
+		
+\begin{figure}[H]
+\centering
+\subfigure[Windows size: 3]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/5n.png}
+}
+\subfigure[Windows size: 5]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/6n.png}
+}\\
+\subfigure[Windows size: 7]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/7n.png}
+}
+\subfigure[Windows size: 9]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/8n.png}
+}
+\caption{Lucas-Kanade method with different parameters}
+\label{fig:LK}
+\end{figure}
+
+	\subsection{Multiresolution}
+	Multiresolution is improvement into the methods above. Since the motion is mosth of the time very fast and cause of objects to change placement more than one pixel, we create multiple resolution of the images. So with lower resolution of the image, we get less movement, which help on detection optical flow better.
+
+	\subsubsection*{Multiresolution Horn-Schunck}
+\begin{figure}[H]
+\centering
+\subfigure[Alpha: 3, resolution level: 1]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/9n.png}
+}
+\subfigure[Optical flow field representation of (a)]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/10n.png}
+}\\
+\subfigure[Alpha: 3, resolution level: 3]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/11n.png}
+}
+\subfigure[Optical flow field representation of (c)]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/12n.png}
+}
+\caption{Multiresolution Horn-Schunck algorithm with different multiresolution levels}
+\label{fig:MRHS}
+\end{figure}
+	
+	\subsubsection*{Multiresolution Lucas-Kanade}
+\begin{figure}[H]
+\centering
+\subfigure[Alpha: 3, resolution level: 1]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/13n.png}
+}
+\subfigure[Optical flow field representation of (a)]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/14n.png}
+}\\
+\subfigure[Alpha: 3, resolution level: 3]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/15n.png}
+}
+\subfigure[Optical flow field representation of (c)]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/16n.png}
+}
+\caption{Multiresolution Lucas-Kanade algorithm with different multiresolution levels}
+\label{fig:MRLK}
+\end{figure}
+
+
+
+\section{Comparison}
+	Here we compare Horn-Schunck and Lucas-Kanade method to see how they responding to change in local like edges or global motion.
+	
+\begin{figure}[H]
+\centering
+\subfigure[Alpha: 3]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/17n.png}
+}
+\subfigure[Alpha: 3]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/18n.png}
+}
+\caption{Horn-Schunck comparison with edgy Pepsi image and more globally smooth taxi motion.}	
+\label{fig:ComparisonHS}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\subfigure[Windows size: 7]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/19n.png}
+}
+\subfigure[Windows size: 7]{
+\includegraphics[width=.45\textwidth]{OpticalFlowReportImages/20n.png}
+}
+\caption{Lucas-Kanade comparison with edgy Pepsi image and more globally smooth taxi motion.}	
+\label{fig:ComparisonLK}
+\end{figure}
+
+
+\section{References}
+
+\begin{enumerate}
+	\item \url{http://en.wikipedia.org/wiki/Optical_flow}
+	\item \url{http://en.wikipedia.org/wiki/Horn\%E2\%80\%93Schunck\_method}
+	\item \url{http://en.wikipedia.org/wiki/Lucas\%E2\%80\%93Kanade_method}
+	\item Help of Ran and Chinmay
+\end{enumerate}
+
+
+\end{document}

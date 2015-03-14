@@ -1,0 +1,33 @@
+function [on off solon soloff] = cskin(c)
+
+off = imread('crulightoff.bmp'); 
+soloff = imread('crulightsoloff.bmp');
+if c == 1
+    on = imread('crulighton1.bmp');
+    solon = imread('crulightsolon1.bmp');
+elseif c == 2
+    on = imread('crulighton2.bmp');
+elseif c == 3
+    on = imread('sphere.bmp');
+    off = imread('sphereoff.bmp');
+elseif c == 4
+    on1 = imread('robo.bmp');
+    solon1 = imread('robosol.bmp');
+    on2 = imread('frog.bmp');
+    solon2 = imread('frogsol.bmp');
+    on3 = imread('magus.bmp');
+    solon3 = imread('magussol.bmp');
+    on4 = imread('chrono.bmp');
+    solon4 = imread('chronosol.bmp');
+    on5 = imread('lucca.bmp');
+    solon5 = imread('luccasol.bmp');
+    on6 = imread('marle.bmp');
+    solon6 = imread('marlesol.bmp');
+    on7 = imread('ayla.bmp');
+    solon7 = imr
+    on = [on1 on2 on3 on4 on5 on6 on7];
+elseif c == 5
+    on = imread('noahon.bmp');
+elseif c == 6
+    on = imread('daveon.bmp');
+end

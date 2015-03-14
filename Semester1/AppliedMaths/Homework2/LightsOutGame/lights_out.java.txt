@@ -1,0 +1,609 @@
+// guichard@whitman.edu
+
+import java.awt.*;
+import java.applet.*;
+import java.net.URL;
+
+public class lights_out extends java.applet.Applet
+{
+  
+  lights_out_display the_display;
+  boolean[][] current_board = new boolean[5][5];
+  boolean[][] goal_board = {{true,true,true,true,true},
+			    {true,true,true,true,true},
+			    {true,true,true,true,true},
+			    {true,true,true,true,true},
+			    {true,true,true,true,true}};
+
+  // The hint matrix was computed in Maple; multiplying it by 
+  // a vector representing the current board gives a vector 
+  // representing the moves necessary to produce the current 
+  // board; since everything is done mod 2, this also gives the 
+  // moves necessary to solve the game.
+
+  int[][] hint_matrix = {
+    { 0,1,1,1,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1,0,0,0 },
+    { 1,1,0,1,1,0,1,0,0,0,0,0,1,1,1,0,0,0,1,0,0,0,0 },
+    { 1,0,1,1,1,1,0,1,1,0,0,0,1,1,0,1,1,1,1,1,0,1,0 },
+    { 1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1 },
+    { 0,1,1,0,1,1,0,0,0,0,1,0,1,0,1,0,0,1,0,1,1,1,0 },
+    { 0,0,1,0,1,0,1,1,0,1,0,0,1,0,0,0,0,0,1,1,0,0,0 },
+    { 0,1,0,1,0,1,1,0,1,1,0,0,0,1,0,1,1,1,0,0,0,1,0 },
+    { 1,0,1,0,0,1,0,1,1,0,0,0,0,0,1,1,0,1,0,1,1,0,1 },
+    { 0,0,1,0,0,0,1,1,1,0,1,0,0,1,1,1,0,0,1,0,0,1,1 },
+    { 1,0,0,0,0,1,1,0,0,0,1,0,1,0,1,0,1,1,0,1,0,0,1 },
+    { 0,0,0,0,1,0,0,0,1,1,0,0,1,0,1,1,1,1,1,0,0,1,0 },
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1 },
+    { 0,1,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1,0,0,1,1,0 },
+    { 1,1,1,0,0,0,1,0,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0 },
+    { 1,1,0,0,1,0,0,1,1,1,1,0,0,1,1,1,1,0,1,0,1,0,0 },
+    { 0,0,1,0,0,0,1,1,1,0,1,0,0,0,1,1,0,1,0,1,1,0,1 },
+    { 0,0,1,1,0,0,1,0,0,1,1,1,0,0,1,0,1,1,1,0,0,0,1 },
+    { 0,0,1,0,1,0,1,1,0,1,1,0,1,0,0,1,1,0,1,1,1,0,0 },
+    { 0,1,1,0,0,1,0,0,1,0,1,0,0,1,1,0,1,1,1,0,0,0,1 },
+    { 1,0,1,0,1,1,0,1,0,1,0,0,0,0,0,1,0,1,0,1,1,0,1 },
+    { 0,0,0,1,1,0,0,1,0,0,0,1,1,0,1,1,0,1,0,1,1,1,0 },
+    { 0,0,1,1,1,0,1,0,1,0,1,1,1,0,0,0,0,0,0,0,1,1,1 },
+    { 0,0,0,1,0,0,0,1,1,1,0,1,0,0,0,1,1,0,1,1,0,1,0 },
+  };
+
+  // These magic vectors allow us to find a shortest possible
+  // solution.
+
+  int[] n1 = {1,0,1,0,1,1,0,1,0,1,0,0,0,0,0,1,0,1,0,1,1,0,1,0,1};
+  int[] n2 = {1,1,0,1,1,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,1,1,0,1,1};
+
+  Label label;
+  framed_canvas framedArea;
+  Image backBuffer;
+  Graphics backGC;
+  Button hint_button, unhint_button, set_button, start_button;
+  boolean buttons;
+
+  final int PLAY = 1;
+  final int SETSTART= 2;
+
+  int mode=PLAY;
+
+  public void init() // Init all the variables and classes
+  { 
+    String str;
+
+    GridBagLayout gridBag = new GridBagLayout();
+    GridBagConstraints c = new GridBagConstraints();
+
+    try
+      {
+	backBuffer = createImage(size().width, size().height);
+      }
+    catch (Exception e) {}
+
+    the_display = new lights_out_display(backBuffer,goal_board);
+    framedArea = new framed_canvas(the_display);
+
+    buttons = getboolean("buttons",false);
+
+    setLayout(gridBag);
+
+    c.fill = GridBagConstraints.BOTH;
+    c.weighty = 4.0;
+    c.weightx = 10.0;
+    c.gridheight = 4;
+    c.gridwidth = 1;
+    gridBag.setConstraints(framedArea, c);
+    add(framedArea);
+
+    if (buttons) {
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.insets = new Insets(4,20,0,15);
+      c.weighty = 0.0;
+      c.weightx = 0.4;
+      c.gridheight = 1;
+      c.gridwidth = GridBagConstraints.REMAINDER; //end row
+      hint_button = new Button("Solve");
+      gridBag.setConstraints(hint_button,c);
+      add(hint_button);
+
+      unhint_button = new Button("Unsolve");
+      gridBag.setConstraints(unhint_button,c);
+      add(unhint_button);
+
+      set_button = new Button("Set");
+      gridBag.setConstraints(set_button,c);
+      add(set_button);
+    
+      start_button = new Button("Restart");
+      c.anchor = GridBagConstraints.NORTH;
+      gridBag.setConstraints(start_button,c);
+      add(start_button);
+    
+      // For debugging
+      //
+      // label = new Label("");
+      // c.fill = GridBagConstraints.HORIZONTAL;
+      // c.weightx = 1.0;
+      // c.weighty = 0.0;
+      // gridBag.setConstraints(label, c);
+      // add(label);
+
+      label = new Label("");
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.weightx = 10.0;
+      c.weighty = 0.0;
+      c.gridheight = 1;
+      gridBag.setConstraints(label, c);
+      add(label);
+
+    }
+    validate();
+  }
+
+  public boolean action(Event e, Object arg) {
+    Object target = e.target;
+    int i,j,h;
+
+    if (target == unhint_button) {
+      for (i=0; i<5; i++) {
+	for (j=0; j<5; j++) {
+	  the_display.unhint(i,j);
+	}
+      }
+      the_display.repaint();
+      return true;
+    }
+    if (target == hint_button) {
+      hint();
+      return true;
+    }
+    if (target == start_button) {
+      hint_button.enable();
+      set_button.setLabel("Set");
+      mode = PLAY;
+      start_game();
+      the_display.repaint();
+      return true;
+    }
+    if (target == set_button) {
+      if (mode == PLAY) {
+	hint_button.disable();
+	for (i=0; i<5; i++) 
+	  for (j=0; j<5; j++) 
+	    {
+	      current_board[i][j] = true;
+	      the_display.square_on(i,j);
+	      the_display.unhint(i,j);
+	    }
+	the_display.repaint();
+	mode = SETSTART;
+	label.setText("");
+	set_button.setLabel("Play"); 
+      } else {
+	hint_button.enable();
+	set_button.setLabel("Set");
+	mode = PLAY;
+      }
+      return true;
+    }
+    return false;
+  }  
+
+  private void acpy (int[] src, int[] dest)
+  {
+    int i;
+    for (i=0; i<src.length; i++) {
+      dest[i] = src[i];
+    }
+  }
+
+  private void addto (int[] src, int[] v)
+  {
+    int i;
+    for (i=0; i<src.length; i++) {
+      src[i] = (src[i] + v[i]) %2 ;
+    }
+  }
+    
+  private int wt (int[] v)
+  {
+    int i,t=0;
+    for (i=0; i < v.length; i++) {
+      t = t + v[i];
+    }
+    return(t);
+  }
+   
+
+  public void hint()
+  {
+    int[] current_state = new int[23];
+    int[] hint_vector = new int[25];
+    int[] best = new int[25];
+    int[] next = new int[25];
+    int i,j;
+
+    for (i=0; i<25; i++) {
+      hint_vector[i] = 0;
+    }
+    for (i=0; i<23; i++) {
+      if (current_board[i%5][i/5]) {
+	current_state[i] = 0; }
+      else {
+	current_state[i] = 1; }
+    }
+    for (i=0; i<23; i++) {
+      for (j=0; j<23; j++) {
+	hint_vector[i] = 
+	  (hint_vector[i] + current_state[j]*hint_matrix[i][j])%2;
+      }
+    }
+
+    // Now we have a working hint vector, but we test h+n1, h+n2 
+    // and h+n1+n2 to see which has the lowest weight, giving a
+    // shortest solution.
+
+    acpy(hint_vector,best);
+    acpy(hint_vector,next);
+    addto(next,n1);
+    if ( wt(next) < wt(best) ) {
+      acpy(next,best);
+    }
+    acpy(hint_vector,next);
+    addto(next,n2);
+    if ( wt(next) < wt(best) ) {
+      acpy(next,best);
+    }
+    acpy(hint_vector,next);
+    addto(next,n1);
+    addto(next,n2);
+    if ( wt(next) < wt(best) ) {
+      acpy(next,best);
+    }
+
+    for (i=0; i<25; i++) {
+      if (best[i] == 1) { the_display.hint(i%5,i/5); }
+      else { the_display.unhint(i%5,i/5); }
+    }
+    the_display.repaint(); 
+  }
+
+
+  public boolean getboolean (String att, boolean def) 
+  {
+    String parm = getParameter(att);
+    if (parm != null) {
+      if (parm.equals("true")) return true;
+      else if (parm.equals("false")) return false;
+      else return def;
+    }
+    return def;
+  } 
+
+  public void
+  toggle_box(int i, int j)
+  {
+    if ( 0 <= i && i <= 4 && 0 <= j && j <= 4 )
+      if (current_board[i][j] = !current_board[i][j]) 
+	the_display.square_on(i,j);
+      else the_display.square_off(i,j);
+  }
+
+  public void
+  do_move(int i,int j)
+  { 
+    if ( 0 <= i && i <= 4 && 0 <= j && j <= 4 ) {
+      the_display.unhint(i,j);
+      toggle_box(i,j);
+      toggle_box(i+1,j);
+      toggle_box(i-1,j);
+      toggle_box(i,j+1);
+      toggle_box(i,j-1);
+    }
+  }
+
+  public boolean rand01()
+  { 
+    if (Math.random() > 0.5) return(true);
+    else return(false);
+  }
+
+  public void start()
+  {
+    //    label.setText("Starting game");
+    start_game();
+    repaint();   
+  }
+
+  public void
+  start_game()
+  { 
+    int i,j;
+
+    if (buttons) { label.setText(""); }
+    for (i=0; i<5; i++) 
+      for (j=0; j<5; j++) 
+	{
+	  current_board[i][j] = true;
+	  the_display.square_on(i,j);
+	  the_display.unhint(i,j);
+	}
+    for (i=0; i<23; i++) 
+	{
+	  if (rand01()) do_move(i%5,i/5);
+	}
+  }
+
+  private boolean XOR (boolean x,boolean y)
+  {
+    return( (x || y) && !(x && y) );
+  }
+
+  public boolean gotFocus(Event e, Object what) {
+    if (size().width != backBuffer.getWidth(this)) {
+      try
+	{
+	  backBuffer = createImage(size().width, size().height);
+	}
+      catch (Exception exc) {}
+      the_display.newscratch(backBuffer);
+    }
+    return(true);
+  }
+
+  private void update_message()
+  {
+    if ( current_solvable() ) {
+      label.setText("This position is winnable.");
+    } else {
+      label.setText("This position is not winnable.");
+    }
+  }
+
+  private boolean current_solvable()
+  {
+    int[] current_state = new int[25];
+    int i,j,dotprod;
+
+    for (i=0; i<25; i++) {
+      if (current_board[i%5][i/5]) {
+	current_state[i] = 0; }
+      else {
+	current_state[i] = 1; }
+    }
+
+    dotprod = 0;
+    for (i=0; i<25; i++) {
+      dotprod = (dotprod + current_state[i]*n1[i])%2;
+    }
+
+    if (dotprod != 0) { return(false); }
+
+    dotprod = 0;
+    for (i=0; i<25; i++) {
+      dotprod = (dotprod + current_state[i]*n2[i])%2;
+    }
+
+    if (dotprod != 0) { return(false); }
+    else { return (true); }
+  }
+
+
+
+
+  public boolean mouseDown(java.awt.Event evt, int x,int y)
+  { 
+    Point action;
+    boolean return_value=false;
+
+  //  label.setText("Click occurred at coordinate ("
+  // + x + ", " + y + ").");
+
+  action = the_display.getevent(x-4,y-4);
+    switch(mode) {
+    case PLAY:
+      do_move(action.x,action.y);    
+      break;
+    case SETSTART:
+      toggle_box(action.x,action.y);
+      if (buttons) { update_message(); }
+      break;
+    }
+  the_display.repaint(); 
+  return(return_value);
+  }
+}
+
+
+class framed_canvas extends Panel {
+  public framed_canvas(Canvas the_display) {
+    super();
+
+    //Set layout to one that makes its contents as big as possible.
+    setLayout(new GridLayout(1,0));
+
+    add(the_display);
+    validate();
+  }
+
+  public Insets insets() {
+    return new Insets(4,4,4,4);
+  }
+
+  public void paint(Graphics g) {
+    Dimension d = size();
+    Color bg = getBackground();
+ 
+    g.setColor(bg);
+    g.draw3DRect(0, 0, d.width - 1, d.height - 1, true);
+    g.draw3DRect(3, 3, d.width - 7, d.height - 7, false);
+  }
+}
+
+class lights_out_display extends Canvas
+{
+  lights_out_square[][] current_board = new lights_out_square[5][5];
+  Color background_col=Color.white;
+  Image backBuffer;
+  Graphics backGC;
+  int width,height,gutter;
+
+  public lights_out_display(Image img,boolean[][] gb)
+  {
+    int i,j;
+    backBuffer = img;
+    for (i=0; i<5; i++) 
+      for (j=0; j<5; j++) 
+	{
+	  current_board[i][j] = new lights_out_square(i,j,gb[i][j]);
+	}
+  }
+
+  public void paint(Graphics g)
+  {
+    update(g);
+  }
+
+  public void newscratch(Image img)
+  {
+    backBuffer = img;
+  }
+
+  public void update(Graphics g)
+  {
+    int i,j,w,h;
+    Graphics backGC;
+
+    w = size().width;
+    h = size().height;
+
+    gutter = w/7;
+    width = (w-gutter)/5;
+    height = (h-gutter)/5;
+    gutter = gutter/6;
+
+    backGC = backBuffer.getGraphics();
+    backGC.setColor(Color.lightGray);
+    backGC.fillRect(0,0,w,h);
+    for (i=0; i<5; i++) 
+      for (j=0; j<5; j++) 
+	{
+	  current_board[i][j].draw(backGC,width,height,gutter);
+	}
+    g.drawImage(backBuffer, 0, 0, this);
+  }
+
+  public Point  getevent(int x, int y)
+  { 
+    int i,j;
+    
+    for (i=0; i<5; i++)
+      for (j=0; j<5; j++) {
+
+	if (current_board[i][j].is_me(x,y,width,height,gutter)) 
+	  return(new Point(i,j));
+    }
+    return(new Point(-1,-1));
+  }
+
+  public void setgoal(int i,int j)
+  { 
+    current_board[i][j].setgoal(true);
+  }
+
+  public void offgoal(int i,int j)
+  { 
+    current_board[i][j].setgoal(false);
+  }
+
+  public void square_on(int i,int j)
+  { 
+    current_board[i][j].square_on();
+  }
+
+  public void square_off(int i,int j)
+  { 
+    current_board[i][j].square_off();
+  }
+
+  public void hint(int i,int j)
+  { 
+    current_board[i][j].hint();
+  }
+
+  public void unhint(int i,int j)
+  { 
+    current_board[i][j].unhint();
+  }
+
+}
+
+class lights_out_square
+{
+  private int inumber,jnumber,width,height,gutter;
+  private Color on_color=Color.red;
+  private Color off_color=Color.blue;
+  private Color hint_color=Color.green;
+  private Color my_color;
+  private boolean goal;
+  private boolean hinted = false;
+
+  public lights_out_square(int i,int j, boolean g)
+  {
+    inumber = i;
+    jnumber = j;
+    goal = g;
+  }
+
+  public boolean is_me(int x, int y,int width,int height,int gutter)
+  {
+    if ( ( 1+(inumber)*(gutter+width) + gutter <= x ) && 
+	 ( x <= 1+(1+inumber)*(gutter+width) ) &&
+	 ( 1+(jnumber)*(gutter+height) + gutter <= y ) && 
+	 ( y <= 1+(1+jnumber)*(gutter+height) ) )
+      return(true);
+    else return(false);
+  }
+
+  public void draw (Graphics g,int width,int height,int gutter)
+  {
+    if (hinted) {
+      g.setColor(hint_color);
+    } else {
+      if (goal) {                   
+	g.setColor(on_color);
+      } else {                      
+	g.setColor(off_color);
+      }
+    }
+    g.fillRect(1+gutter+(inumber)*(gutter+width),
+		 1+gutter+(jnumber)*(gutter+height),width,height);
+    g.setColor(my_color);
+    g.fillOval(1+gutter+(inumber)*(gutter+width),
+	       1+gutter+(jnumber)*(gutter+height),width,height);
+  }
+
+  public void setgoal (boolean b)
+  {
+    goal = b;
+  }
+
+  public void square_on ()
+  {
+    my_color= on_color;
+  }
+
+  public void square_off () 
+  {
+     my_color= off_color;
+  }
+
+  public void hint () 
+  {
+     hinted = true;
+  }
+
+  public void unhint () 
+  {
+     hinted = false;
+  }
+
+}

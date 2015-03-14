@@ -1,0 +1,39 @@
+function L = picture(L,choose)
+
+if nargin == 1
+    choose = randi(4);
+end
+
+if choose  == 1
+% Arrow
+L = [0 0 0 0 0;
+     0 1 1 1 0;
+     0 1 1 0 0;
+     0 1 0 1 0;
+     0 0 0 0 1];
+
+elseif choose == 2 
+% Rocket Ship 
+L = [0 0 1 0 0;
+     0 1 1 1 0;
+     0 1 0 1 0;
+     1 1 1 1 1;
+     1 0 1 0 1];
+ 
+elseif choose == 3 
+% Sail Boat
+L = [0 0 1 0 0;
+     0 1 1 0 0;
+     0 0 1 0 0;
+     1 1 1 1 1;
+     0 1 1 1 0];
+ 
+elseif choose == 4
+ % Heart
+ L = [0 1 0 1 0;
+      1 0 1 0 1;
+      1 0 0 0 1;
+      0 1 0 1 0;
+      0 0 1 0 0];
+end
+ L = L;

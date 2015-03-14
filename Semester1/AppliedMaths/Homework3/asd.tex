@@ -1,0 +1,222 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+\usepackage{mathtools}
+\usepackage{algpseudocode}
+
+
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{Applied Mathematics Home Work 3}
+\author{Emre Ozan Alkan}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\section{Problem 1}
+
+For the first day, we have 750 people purchased newspaper and 250 people did not. I constructed v vector for day zero as
+
+$$v_{0} = 
+  \begin{pmatrix} 750 \\ 250 \end{pmatrix}
+$$
+My Markov matrix, where each column's sum is 1, is created with the given values
+
+$$ M = 
+ \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix}
+$$
+
+\subsection{If a person purchased a paper today, how likely is he to purchase a paper on Day 2? Day 3? Day n?}
+
+Calculating  probability of one person, we should change our v vector as;
+
+$$v_{0} = 
+  \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+$$
+to represent one person. For calculating, we need to use our Markov Matrix. Then the calculations for Day 2 , Day 3 and Day n is respectively;
+
+$$Day\ 2, v_{2} = 
+   \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix}     \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix}  \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \%55\ likehood\ to\ buy
+$$
+
+$$Day\ 3, v_{3} = 
+   \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix}        \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix}     \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix}  \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \%47.5\ likehood\ to\ buy
+$$
+
+$$Day\ n, v_{n} = 
+   \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix} ^ {n} \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+$$
+
+
+\subsection{What sales figures can The Computer Visionist expect on Day 2? Day 3? Day n?}
+
+To calculate sales figures for whole people, we should consider our v vector in Day zero as;
+
+$$v_{0} = 
+  \begin{pmatrix} 750 \\ 250 \end{pmatrix}
+$$
+
+$$Day\ 2, v_{2} = 
+   \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix} ^ {2} \begin{pmatrix} 750 \\ 250 \end{pmatrix}
+ = \begin{pmatrix} 487.5 \\ 512.5 \end{pmatrix} = 487.5\ sales
+$$
+
+$$Day\ 3, v_{3} = 
+   \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix} ^ {3} \begin{pmatrix} 750 \\ 250 \end{pmatrix}
+ = \begin{pmatrix} 443.75 \\ 556.25 \end{pmatrix} = 443.75\ sales
+$$
+
+$$Day\ n, v_{3n} = 
+   \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix} ^ {n} \begin{pmatrix} 750 \\ 250 \end{pmatrix}
+$$
+
+
+
+\subsection{Will the sales figures fluctuate a great deal from day to day, or are they likely to become stable eventually ?}
+
+Here is our Markov Matrix:
+
+$$ M = 
+ \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix}
+$$
+
+For n =  1 to infinity, $ M^{n} $ goes to be stable.
+
+$$ M^{1} = 
+ \begin{bmatrix}
+	0.7 & 0.2 \\ 0.3 & 0.8
+ \end{bmatrix}
+$$
+
+$$ M^{2} = 
+ \begin{bmatrix}
+	0.55 & 0.3 \\ 0.45 & 0.7
+ \end{bmatrix}
+$$
+
+$$\dots$$
+
+$$ M^{10} = 
+ \begin{bmatrix}
+	0.4006 & 0.3996 \\ 0.5994 & 0.6004
+ \end{bmatrix}
+$$
+
+$$\dots$$
+
+$$ M^{14} = 
+ \begin{bmatrix}
+	0.4 & 0.4 \\ 0.6 & 0.6
+ \end{bmatrix}
+$$
+
+$$\dots$$
+
+$$ M^{20} = 
+ \begin{bmatrix}
+	0.4 & 0.4 \\ 0.6 & 0.6
+ \end{bmatrix}
+$$
+
+$$\dots$$
+
+After 14th day, sales figure become stable.
+
+
+
+
+
+
+\section{Problem 2}
+
+
+\subsection{Summary of the ranking method}
+
+
+\subsection{How eigenvalue problem solved}
+
+
+\subsection{5x5 Markov matrix, algorithm application}
+
+
+\subsection{Matlab Function}
+
+
+\subsection{Comments}
+
+
+\end{document}

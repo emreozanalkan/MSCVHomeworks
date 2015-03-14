@@ -1,0 +1,13 @@
+function on = skinsel(c)
+
+onone = imread('crulighton.bmp');
+ontwo = imread('crulighton2.bmp');
+
+if c == 1
+    on = onone;
+end
+if c == 2
+    on = on2;
+end
+
+end

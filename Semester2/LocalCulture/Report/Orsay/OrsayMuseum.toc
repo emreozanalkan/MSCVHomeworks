@@ -1,0 +1,48 @@
+\contentsline {section}{\numberline {1}History of the Museum}{4}{section.1}
+\contentsline {paragraph}{}{4}{section.1}
+\contentsline {paragraph}{}{4}{section.1}
+\contentsline {subsection}{\numberline {1.1}The site}{4}{subsection.1.1}
+\contentsline {paragraph}{}{4}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}The Station}{4}{subsection.1.2}
+\contentsline {paragraph}{}{4}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Station to Museum}{5}{subsection.1.3}
+\contentsline {paragraph}{}{5}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Architecture}{6}{subsection.1.4}
+\contentsline {paragraph}{}{6}{subsection.1.4}
+\contentsline {subsection}{\numberline {1.5}Facts}{7}{subsection.1.5}
+\contentsline {paragraph}{}{7}{table.caption.5}
+\contentsline {paragraph}{}{7}{table.caption.5}
+\contentsline {paragraph}{}{7}{table.caption.5}
+\contentsline {paragraph}{}{7}{table.caption.5}
+\contentsline {section}{\numberline {2}Importance for Impressionism}{8}{section.2}
+\contentsline {subsection}{\numberline {2.1}What is impressionism ? }{8}{subsection.2.1}
+\contentsline {paragraph}{}{8}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Orsay's importance}{8}{subsection.2.2}
+\contentsline {paragraph}{}{8}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Important Impressionist Artists in Orsay}{8}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Claude Monet}{8}{subsubsection.2.3.1}
+\contentsline {paragraph}{}{8}{figure.caption.6}
+\contentsline {paragraph}{}{8}{figure.caption.6}
+\contentsline {subsubsection}{\numberline {2.3.2}Vincent van Gogh}{9}{subsubsection.2.3.2}
+\contentsline {paragraph}{}{9}{figure.caption.7}
+\contentsline {subsubsection}{\numberline {2.3.3}\IeC {\'E}douard Manet}{9}{subsubsection.2.3.3}
+\contentsline {paragraph}{}{9}{figure.caption.8}
+\contentsline {subsubsection}{\numberline {2.3.4}Edgar Degas}{9}{subsubsection.2.3.4}
+\contentsline {paragraph}{}{9}{figure.caption.9}
+\contentsline {subsubsection}{\numberline {2.3.5}Pierre-Auguste Renoir}{10}{subsubsection.2.3.5}
+\contentsline {paragraph}{}{10}{figure.caption.10}
+\contentsline {subsubsection}{\numberline {2.3.6}Paul C\IeC {\'e}zanne}{10}{subsubsection.2.3.6}
+\contentsline {paragraph}{}{10}{figure.caption.11}
+\contentsline {subsubsection}{\numberline {2.3.7}Georges Seurat}{11}{subsubsection.2.3.7}
+\contentsline {paragraph}{}{11}{figure.caption.12}
+\contentsline {subsubsection}{\numberline {2.3.8}Alfred Sisley}{11}{subsubsection.2.3.8}
+\contentsline {paragraph}{}{11}{figure.caption.13}
+\contentsline {subsubsection}{\numberline {2.3.9}Paul Gauguin}{11}{subsubsection.2.3.9}
+\contentsline {paragraph}{}{11}{figure.caption.14}
+\contentsline {section}{\numberline {3}Artworks in the Museum}{12}{section.3}
+\contentsline {subsection}{\numberline {3.1}Paintings}{12}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Sculptures}{12}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Photography}{12}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Graphic Art}{12}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}Decoratives}{12}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}Architecture}{12}{subsection.3.6}

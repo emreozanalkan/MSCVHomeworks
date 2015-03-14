@@ -1,0 +1,269 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{anysize}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{float}
+
+
+\newcommand{\BigO}[1]{\ensuremath{\operatorname{O}\bigl(#1\bigr)}}
+
+\usepackage{listings}
+\lstset{
+	language=C++,                	% choose the language of the code
+	basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+	numbers= left,                 	% where to put the line-numbers
+	numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+	stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,           		% adds a frame around the code
+	tabsize=2,          			% sets default tabsize to 2 spaces
+	captionpos=t,          			% sets the caption-position to bottom (t=top, b=bottom)
+	breaklines=true,        		% sets automatic line breaking
+	breakatwhitespace=false,    	% sets if automatic breaks should only happen at whitespace
+	escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+
+
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox[c]{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}{10pt}
+
+\marginsize{3cm}{2cm}{2cm}{2cm}
+
+\title{Software Engineering\\
+		Lab 7 Report}
+\author{Emre Ozan Alkan\\
+		\{emreozanalkan@gmail.com\}\\
+		MSCV-5}
+\date{22 November 2013}
+
+\begin{document}
+\maketitle
+
+\section{Binary Tree Dictionary}
+	In this lab we studied binary trees, and how to recursively construct, traverse, print and delete it. We created example dictionary application as requested in lab paper.
+
+	\subsection{Node Class}
+	Node class declared and implemented to store char array as pointer, representing a word in dictionary tree.
+	
+	\begin{lstlisting}[label=Node-h, caption=Node.h]
+	
+class Node
+{
+private:
+    char* _data;        // The data in this node
+    Node* _leftNode;    // Pointer to the left node
+    Node* _rightNode;   // Pointer to the right node
+public:
+    Node();
+    Node(char*);
+    ~Node();
+
+    void setData(char*);        // _data setter
+    void setLeftNode(Node*);    // _left setter
+    void setRightNode(Node*);   // _right setter
+
+    char* getData() const;          // _data getter
+    Node* getLeftNode() const;      // _left getter
+    Node* getRightNode() const;     // _right getter
+
+    void insertData(char* data);    // Inserts data to the tree
+
+    void printPreOrder() const;   // Prints the tree Pre-Order
+    void printPostOrder() const;  // Prints the tree Post-Order
+    void printInOrder() const;    // Prints the tree In-Order
+};
+
+	\end{lstlisting}
+	
+	
+	\subsection{Binary Tree Construction}
+	I created insertion function to construct and insert data to tree in lexical order as requested.
+	
+	\begin{lstlisting}[label=Node-construction, caption=Tree Insertion]
+	
+// Getting word as char array, and inserting it to correct poisition in tree.
+// If it's data is empty, stores in it self, otherwise compare with its data
+// to check lexical order, leaxically smaller word tend to go left, others
+// inserted to right in binary data structure context.
+void Node::insertData(char* data)
+{
+    if(this->_data == 0)
+    {
+        this->_data = data;
+        return;
+    }
+
+    int compareResult = strcmp(this->_data, data);
+
+    if(compareResult == 0)
+        return;
+    else if(compareResult > 0)
+    {
+        if(this->_leftNode == 0)
+        {
+            Node* leftNode = new Node(data);
+            this->setLeftNode(leftNode);
+        }
+        else
+            this->_leftNode->insertData(data);
+
+    }
+    else
+    {
+        if(this->_rightNode == 0)
+        {
+            Node* rightNode = new Node(data);
+            this->setRightNode(rightNode);
+        }
+        else
+            this->_rightNode->insertData(data);
+    }
+}
+	\end{lstlisting}
+	
+	
+	\subsection{Printing Binary Tree}
+	Here is the 3 displaying/printing function for our binary tree, which are traversing Pre-Order, Post-Order and In Order.
+	
+	\begin{lstlisting}[label=Node-printing, caption=Printing Tree]
+	
+// The Pre-Order traversal: at each node the root is evaluated first
+// then the left sub tree, the the right subtree.
+void Node::printPreOrder() const
+{
+    if(this->_data != 0)
+        cout<<"word="<<this->_data<<endl;
+
+    if(this->_leftNode != 0)
+        this->_leftNode->printPreOrder();
+
+    if(this->_rightNode != 0)
+        this->_rightNode->printPreOrder();
+}
+
+// The Post-Order traversal: the left subtree first
+// then the right subtree, then the root
+void Node::printPostOrder() const
+{
+    if(this->_leftNode != 0)
+        this->_leftNode->printPostOrder();
+
+    if(this->_rightNode != 0)
+        this->_rightNode->printPostOrder();
+
+    if(this->_data != 0)
+        cout<<"word="<<this->_data<<endl;
+}
+
+// The In Order traversal: left, root, then right nodes evaluated.
+void Node::printInOrder() const
+{
+    if(this->_leftNode != 0)
+        this->_leftNode->printInOrder();
+
+    if(this->_data != 0)
+        cout<<"word="<<this->_data<<endl;
+
+    if(this->_rightNode != 0)
+        this->_rightNode->printInOrder();
+}
+
+	\end{lstlisting}
+	
+	
+	\subsection{Example Main}
+	
+		\begin{lstlisting}[label=Node-main, caption=Node Example Main]
+	
+int main(void)
+{
+    Node* rootNode = new Node();
+    char* word = 0;
+    int wordCount = 0;
+
+    cout<<"How many words do you want to add to the dictionary?"<<endl;
+    cin>>wordCount;
+
+    for(int i = 0; i < wordCount; i++)
+    {
+        word = new char[256];
+        cout<<"enter word to add to the dictionary: ";
+        cin>>word;
+        rootNode->insertData(word);
+    }
+
+    cout<<"----PREORDER DISPLAY------------------"<<endl;
+    rootNode->printPreOrder();
+    cout<<"----POSTORDER DISPLAY-----------------"<<endl;
+    rootNode->printPostOrder();
+    cout<<"----IN ORDER DISPLAY------------------"<<endl;
+    rootNode->printInOrder();
+    
+    delete rootNode;
+    rootNode = 0;
+    word = 0;
+    
+    return 0;
+}
+	\end{lstlisting}
+	
+	\subsection{Result}
+	
+\includegraphics[scale=0.8]{lab7Result.png}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

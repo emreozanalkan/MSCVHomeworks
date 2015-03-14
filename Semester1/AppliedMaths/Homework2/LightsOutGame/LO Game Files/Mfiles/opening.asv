@@ -1,0 +1,63 @@
+% Thank You Jérôme Briot
+
+% Create figure
+figure('color','k')
+
+% Create axes  
+axes('color','k')
+
+% Starting screen.
+t(1)=text(.20,.85,'L','fontname','vani','fontsize',60,'color','k','hor','center','fontweight','bold');
+t(2)=text(.30,.85,'I','fontname','vani','fontsize',60,'color','k','hor','center','fontweight','bold');
+t(3)=text(.40,.85,'G','fontname','vani','fontsize',60,'color','k','hor','center','fontweight','bold');
+t(4)=text(.54,.85,'H','fontname','vani','fontsize',60,'color','k','hor','center','fontweight','bold');
+t(5)=text(.69,.85,'T','fontname','vani','fontsize',60,'color','k','hor','center','fontweight','bold');
+t(6)=text(.81,.85,'S','fontname','vani','fontsize',60,'color','k','hor','center','fontweight','bold');
+t(7)=text(.50,.62,'OUT!','fontname','vani','fontsize',60,'color','k','hor','center','fontweight','bold');
+t(8)=text(.50,.45,'by Reed Williston','fontname','vani','fontsize',35,'color','k','hor','center','fontweight','bold');
+t(9)=text(.50,.35,'&','fontname','vani','fontsize',25,'color','k','hor','center','fontweight','bold');
+t(10)=text(.50,.22,'Noah Flemens','fontname','vani','fontsize',35,'color','k','hor','center','fontweight','bold');
+t(11)=text(.50,.09,'(Press Enter)','fontname','vani','fontsize',20,'color','k','hor','center','fontweight','bold');
+skip =text(.50,.02,'(Press s to skip)','fontname','vani','fontsize',14,'color','w','hor','center','fontweight','bold');
+for m=1:length(t)
+    
+        if m < 7
+            for n = 0:.1:1
+            pause(.03)
+            set(t(m),'color',[n n 0])
+            drawnow
+            end
+        elseif m == 7
+            delete(skip)
+            for p=1:5
+                pause(.02)
+                set(t(m),'color',[0 0 0])
+                drawnow
+                pause(.1)
+                set(t(m),'color',[1 1 0])
+                drawnow
+            end
+            pause(1)
+        elseif ((m > 7) && (m < 11))
+            for q = 0:.1:1
+            pause(.02)
+            set(t(m),'color',[.3 .8 q])
+            drawnow
+            end
+            pause(.5)
+        elseif m == 11
+            for r = 0:.05:1
+            pause(.01)
+            set(t(m),'color',[r .8 r])
+            drawnow
+            end            
+        end
+    k = get (gcf, 'CurrentCharacter');
+    if k == 's' % Skip the opening.
+        close all
+        return
+    end
+end
+
+% Close up. 
+pause

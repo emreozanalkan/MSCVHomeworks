@@ -1,0 +1,39 @@
+function L = activate(L,i,j)    
+
+if j == 5
+    for c = -1
+        L(i,j+c) = invert(L(i,j+c));
+    end
+end
+
+if i == 5
+    for r = -1:0
+        L(i+r,j) = invert(L(i+r,j));
+    end 
+end
+
+if j == 1 
+    for c = 1
+        L(i,j+c) = invert(L(i,j+c));
+    end
+end
+
+if i == 1
+    for r = 0:1
+        L(i+r,j) = invert(L(i+r,j));
+    end 
+end
+
+if j ~= 5 && j ~= 1
+    for c = -1:2:1
+        L(i,j+c) = invert(L(i,j+c));
+    end
+end
+
+if i ~= 5 && i ~= 1
+    for r = -1:1
+        L(i+r,j) = invert(L(i+r,j));
+    end
+elseif (i > 5) || (i < 1)    
+    
+end

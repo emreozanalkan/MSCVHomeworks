@@ -1,0 +1,444 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{anysize}
+\usepackage{color}
+\usepackage{xcolor}
+
+\usepackage{listings}
+\lstset{
+	language=C++,                	% choose the language of the code
+	basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+	numbers= left,                 	% where to put the line-numbers
+	numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+	stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,           		% adds a frame around the code
+	tabsize=2,          			% sets default tabsize to 2 spaces
+	captionpos=t,          			% sets the caption-position to bottom (t=top, b=bottom)
+	breaklines=true,        		% sets automatic line breaking
+	breakatwhitespace=false,    	% sets if automatic breaks should only happen at whitespace
+	escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+
+
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox[c]{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}{10pt}
+
+\marginsize{3cm}{2cm}{2cm}{2cm}
+
+\title{Software Engineering\\
+		Lab 1 Report}
+\author{Emre Ozan Alkan\\
+		\{emreozanalkan@gmail.com\}\\
+		MSCV-5}
+\date{11 October 2013}
+
+\begin{document}
+\maketitle
+
+\section{Hello World on different platforms}
+
+Once upon a time there was a C++, where we used to write our codes cross-platform. So basic "Hello, World!"  should be working on all the platforms.
+
+\begin{lstlisting}[label=hello-world,caption=Hello World!]
+	
+#include <iostream>
+
+int main(int argc, char **argv, char **env)
+{
+  std::cout<<"Hello, World!"<<std::endl;  
+  return EXIT_SUCCESS;
+}
+\end{lstlisting}
+
+
+\section{Variables}
+	
+	\subsection{Global and other variables}
+		Local variable is variable declared within scope like main() or any function or anything that using { }. Their life-cycle is limited with the scope. Whereas global variable is declared globaly which means not in any scope maybe except namespaces, where their life-cycle is limited with the life of the program/executable/thread its declared in. 
+		\subsubsection{Elementary functions: Mean, Min, and Max}
+		Since there is no clue on the data type of the variables, instead of overloading the functions for the types int, float, double etc, I wanted to use templates for flexibility.
+			\begin{enumerate}
+  				\item Maximum of two variables \\
+  				\begin{lstlisting}[label=max-of-two,caption=Max Of Two!]
+/*
+ * Function: myMaxFunction
+ * -----------------------------
+ * Calculating the maximum of the two given numbers
+ *
+ * T1: Any data type of number as first parameter
+ * T2: Any data type of number as second parameter
+ *
+ * returns: nothing.
+ * prints: Prints the maximum of the two numbers to console.
+ *
+ */
+template<class T1, class T2>
+void myMaxFunction(T1 firstNumber, T2 secondNumber)
+{
+	cout<<"The maximum of your inputs is: "<<(firstNumber > secondNumber ? firstNumber : secondNumber)<<endl;
+}
+\end{lstlisting}  				
+  				\item Minimum of two variables \\
+  				\begin{lstlisting}[label=min-of-two,caption=Min Of Two!]
+/*
+ * Function: myMinFunction
+ * -----------------------------
+ * Calculating the minumum of the two given numbers
+ *
+ * T1: Any data type of number as first parameter
+ * T2: Any data type of number as second parameter
+ *
+ * returns: nothing.
+ * prints: Prints the minimum of the two numbers to console.
+ *
+ */
+template<class T1, class T2>
+void myMinFunction(T1 firstNumber, T2 secondNumber)
+{
+    cout<<"The minumum of your inputs is: "<<(firstNumber < secondNumber ? firstNumber : secondNumber)<<endl;
+}
+\end{lstlisting}  		
+  				\item Mean of two variables \\
+  				\begin{lstlisting}[label=mean-of-two,caption=Mean Of Two!]
+/*
+ * Function: myMeanFunction
+ * -----------------------------
+ * Calculating the mean of the two given numbers
+ *
+ * T1: Any data type of number as first parameter
+ * T2: Any data type of number as second parameter
+ *
+ * returns: nothing.
+ * prints: Prints the mean value of the two numbers to console.
+ *
+ */
+template<class T1, class T2>
+void myMeanFunction(T1 firstNumber, T2 secondNumber)
+{
+    cout<<"The mean of your inputs is: "<<((firstNumber + secondNumber) / 2.)<<endl;
+}
+\end{lstlisting}  
+			\end{enumerate}
+
+
+
+\section{Combination}
+
+	\subsection{Factorial}
+	Here is the iterative factorial function. It returns very large positive integer type because of computational needs. In source code, I'm defined my MY\_DEBUG preprocessor to debugging and printing to console.
+	
+		\begin{lstlisting}[label=factorial-function,caption=Factorial]	
+/*
+ * Function: myFactorialFunction
+ * -----------------------------
+ * http://en.wikipedia.org/wiki/Factorial
+ * "Factorial of a non-negative integer n, denoted by n!"
+ *
+ * n: positive integer for factorial degree
+ *
+ * returns: the result of factorial calculation of type "unsigned long long int"
+ */
+unsigned long long int myFactorialFunction(unsigned int n)
+{
+#if MY_DEBUG
+    cout<<"myFactorialFunction param n: "<<n<<endl;
+#endif
+    if(n <= 0) return 1;
+    
+    // stores the factorial calculation
+    unsigned long long int factorial = 1;
+    
+    while(n > 1)
+    {
+        factorial *= n;
+#if MY_DEBUG
+        cout<<"myFactorialFunction current factorial is "<<factorial<<endl;
+#endif
+        --n;
+    }
+    
+    return factorial;
+}
+		\end{lstlisting}
+
+	\subsection{Number of combinations from a set}
+	Given set S, here is the function to find k-combination of the set. After having problems with big number calculations, instead of calculation factorials individually by function listed in Listing 5, I try to simplify calculations.
+		\begin{lstlisting}[label=set-combination,caption=Set Combination]	
+/*
+ * Function: setCombination
+ * -----------------------------
+ * http://en.wikipedia.org/wiki/Combination
+ * "K-combination of a set S"
+ *
+ * n: positive integer for set number
+ * k: positive integer for k-combination
+ *
+ * returns: the result of combination of type "unsigned long long int"
+ */
+unsigned long long int setCombination(unsigned int n, unsigned int k)
+{
+#if MY_DEBUG
+    cout<<"setCombination param n: "<<n<<" k: "<<k<<endl;
+#endif
+    
+    // Calculation the denominator part with only k.
+    // Instead of calculating all the factorials, below we go n to (n-k) to avoid n! and (n-k)!
+    unsigned long long int kFactorial = myFactorialFunction(k);
+    unsigned long long int setFactorial = 1; // Storing the result of numerator part, but just n to (n-k)
+    
+    
+    // Instead of calculating n! / (n-k)!, we calculate n * (n - 1) * ... * (n - k + 1)
+    for(unsigned int i = n; i > (n - k); i--)
+        setFactorial *= i;
+    
+#if MY_DEBUG
+    cout<<"setCombination setFactorial: "<<setFactorial<<" kFactorial: "<<kFactorial<<endl;
+#endif
+    
+    return setFactorial / kFactorial;
+}
+		\end{lstlisting}
+
+	\subsection{Number of combinations with repetitions}
+	Given set S, here is the function to find k-combination of the set with repetitions similar to Listing 6.
+		\begin{lstlisting}[label=combination-with-repetitions,caption=Combination w/Repetitions]	
+/*
+ * Function: repetitionCombination
+ * -----------------------------
+ * http://en.wikipedia.org/wiki/Combination#Number_of_combinations_with_repetition
+ * "K-combination of a set S"
+ *
+ * n: positive integer for set number
+ * k: positive integer for k-combination
+ *
+ * returns: the result of number of combination with repetitions of type "unsigned long long int"
+ */
+unsigned long long int repetitionCombination(unsigned int n, unsigned int k)
+{
+#if MY_DEBUG
+    cout<<"repetitionCombination param n: "<<n<<" k: "<<k<<endl;
+#endif
+    unsigned long long int topResult = myFactorialFunction(n + k -1); // Calculating enumarator part of the formula
+    unsigned long long int bottomResult = myFactorialFunction(k) * myFactorialFunction(n -1); // Calculating denominator part of the formula
+    
+#if MY_DEBUG
+    cout<<"repetitionCombination topResult: "<<topResult<<" bottomResult: "<<bottomResult<<endl;
+#endif
+    
+    return topResult / bottomResult;
+}
+		\end{lstlisting}
+
+
+	\subsection{Permutations}
+	Given set S, finding k-permutation of the S. After having problems, similar simplification in Listing 6 is used on calculations.
+		\begin{lstlisting}[label=permutations,caption=Permutations]	
+/*
+ * Function: myPermutationFunction
+ * -----------------------------
+ * http://en.wikipedia.org/wiki/Permutation
+ * "The k-permutations, or partial permutations, are the sequences of k distinct elements selected from a set."
+ *
+ * n: positive integer for set number
+ * k: positive integer for k-combination
+ *
+ * returns: the result of number of combination with repetitions of type "unsigned long long int"
+ */
+unsigned long long int myPermutationFunction(unsigned int n, unsigned int k)
+{
+#if MY_DEBUG
+    cout<<"myPermutationFunction param n: "<<n<<" k: "<<k<<endl;
+#endif
+    
+    // return myFactorialFunction(n) / myFactorialFunction(n-k);
+    
+    // storing result of the permutation
+    unsigned long long int result = 1;
+    
+    for(unsigned int i = n; i > n - k; i--) // instead of calculating factorials individually, we multiply from n to n-k( n * (n - 1) * ... (n - k + 1))
+        result = result * i;
+    
+    return result;
+}
+		\end{lstlisting}
+
+
+\section{List of Fibonacci numbers and its relation with the golden ratio}
+
+	\subsection{List of Fibonacci}
+	Here is the recursive fibonacci function implemented according to the given formula. On the next example, I had problems with recursive fibonacci, and declared iterative one for being faster.
+		\begin{lstlisting}[label=recursive-fibonacci,caption=Fibonacci]	
+/*
+ * Function: fibonacci
+ * -----------------------------
+ * http://en.wikipedia.org/wiki/Fibonacci_number
+ * "By definition, the first two numbers in the Fibonacci sequence are 0 and 1, and each subsequent number is the sum of the previous two."
+ * 
+ * Calculating the Nth fibonacci number
+ *
+ * n: positive integer for fibonacci sequence
+ *
+ * returns: the result of Nth fibonacci number of type "unsigned long long int"
+ */
+unsigned long long int fibonacci(unsigned int n)
+{
+    if(n == 0) return 0; // base case for fib(2-2)
+    if(n == 1) return 1; // base case for fib(2-1)
+    return fibonacci(n - 1) + fibonacci(n - 2); // recursive call with fibonacci definition
+}
+		\end{lstlisting}
+		
+	\subsection{Approximation of the golden ratio}
+	Approximating the golden ratio by 0.000001 and with higher precisions. FIB\_APPROX\_POW is to define power of the 10, where -6, -9 and -12 is tested. Data types like float was not able to keep up with enought precisions, so double is used everywhere.
+		\begin{lstlisting}[label=fibonacci-approximation,caption=Fibonacci Approximation]	
+unsigned long long int fibonacci2(unsigned int n)
+{
+    unsigned long long int a = 1, b = 1;
+    for (unsigned int i = 3; i <= n; i++) {
+        unsigned long long int c = a + b;
+        a = b;
+        b = c;
+    }
+    return b;
+}
+
+/*
+ * Function: fibonacciApproximation
+ * -----------------------------
+ *
+ * Getting ratio of 2 consecutive fibonacci number and substract from golden ratio
+ * We try to approximate 10^ -6 to -12 with getting absolute of this difference
+ *
+ * returns: nothing
+ */
+void fibonacciApproximation(void)
+{
+    // register keywords probably will not work,
+    // but if it forces program somehow to use CPU registers, it may become faster.
+    
+    // stores min difference between ratio and fibonacci
+    register long double diff = pow(10.0L, FIB_APPROX_POW);
+    // ratio of 2 consecutive fibonacci number
+    register long double myFibonacciRatio = .0L;
+    // keep track of the index of fibonacci numbers
+    register unsigned int i = 1;
+    // stores the fibonacci(i + 1) number
+    register unsigned long long int fibonacciN1 = 0;
+    // stores the fibonacci(i)
+    register unsigned long long int fibonacciN = 0;
+    // stores absolute value of difference between fibonacci ratio and golden ratio
+    register long double approx = .0L;
+    
+    do
+    {
+        fibonacciN = fibonacci2(i); //fibonacci(i)
+        fibonacciN1 = fibonacci2(i + 1); //fibonacci(i + 1)
+        
+        myFibonacciRatio = double(fibonacciN1) / double(fibonacciN);
+        
+        approx = abs(myFibonacciRatio - goldenRatio);
+        
+        i++;
+        
+    }while(approx > diff);
+    
+    cout<<"Latest fibonacciN: "<<fibonacciN<<endl;
+    cout<<"Latest fibonacciN1: "<<fibonacciN1<<endl;
+    cout<<"Fibonacci index: "<<i<<endl;
+    cout<<"Result with 10^("<<FIB_APPROX_POW<<") approximation is: myFibonacciRatio: "<<myFibonacciRatio<<" myDifference: "<<approx<<endl;
+}
+		\end{lstlisting}
+
+
+\section{Pascal’s triangle}
+Calculating and showing Pascal's Triangle using set combination function in Listing 6. 
+
+		\begin{lstlisting}[label=pascal-triangle,caption=Pascal Triangle]	
+/*
+ * Function: printPascalTriangle
+ * -----------------------------
+ * http://en.wikipedia.org/wiki/Pascal's_triangle
+ * "Pascal's triangle is a triangular array of the binomial coefficients"
+ *
+ * Inspired by: http://www.cplusplus.com/forum/general/56615/#msg304724
+ *
+ * nPascal: positive integer for Nth first row of pascal
+ *
+ * returns: nothing
+ * prints: pascal triangle of nPascal th first row
+ */
+void printPascalTriangle(unsigned int nPascal)
+{
+    unsigned long long int pascalNumber = 1; // storing first number of pascal triangle
+    
+    cout<<"==Pascal Triangle=="<<endl;
+    
+    for(unsigned int i = 0; i < nPascal; i++) // looping to print pascal lines
+    {
+        for(unsigned int j = 0; j <= i; j++) // looping to print pascal numbers in line i
+        {
+            pascalNumber = setCombination(i, j); // Calculation pascal numbers for ith row ex : (5 0) (5 1) (5 2) (5 3) (5 4) (5 5)
+            cout<<pascalNumber<<" ";
+        }
+        cout<<endl;
+    }
+    
+    return;
+}
+		\end{lstlisting}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

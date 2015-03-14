@@ -1,0 +1,141 @@
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{theorem}
+\usepackage{bm}
+
+\topmargin=0cm
+\textheight=700pt
+\textwidth=430pt
+\oddsidemargin=0pt
+\headsep=0pt
+\headheight=0pt 
+\title{}
+\author{Ran, Ozan}
+
+\begin{document} 
+
+\begin{flushright}
+Ran, Ozan\\
+\today\\
+\end{flushright}
+
+\centerline{ \Huge  \textbf{Applied Mathematics} }
+\centerline{\Large  Home work 2}
+\centerline{\Large  Light Out}
+% % start of document.
+
+
+\section*{ $\llcorner$  Chapter 1: Mathematical Modeling $\urcorner$}
+\noindent1. Why it can be solved by linear Algebra
+
+There are two typical features for the solution of the game. First, each button just need to be pushed no more than once since double push equals no push. Second, the order of pushing is immaterial because the state of a button depends only on how many times it be turned. With these two features, we can draw a conclusion that the solution of the lights matrix also can be given by a matrix. In other words, it's the problem of Ax = b, where A is the game system, x is the vector of turning operation, b is the respond of the game system after turning operation.
+\\
+
+\noindent2. Game System and Button Pushing Operation
+
+Let's look at a random operation vector:
+\begin{equation}
+x = [...0,1,0,0,1...]^{T}
+\end{equation}
+Refer to the feature of matrix multiplication, when we doing the A multiply x, operation vector x actually choose some columns of A while the elements of other columns multiply 0 in x. In that case, we can connect the columns of A with the respond of button pushing operation.
+Let's start with a 3*3 matrix which can be the minimum lights matrix of the game.
+$$
+Lights Matrix = \begin{bmatrix} 0 & 0 & 0\\ 0 & 0 & 0 \\ 0 & 0 & 0\end{bmatrix} 
+$$
+If the first element of vector x is 1:
+$$
+Lights Matrix = \begin{bmatrix} 1 & 1 & 0\\ 1 & 0 & 0 \\ 0 & 0 & 0\end{bmatrix} 
+$$
+Let's reshape the Lights Matrix into one column:
+$$
+Col1^{T} = \begin{bmatrix} 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0\end{bmatrix} 
+$$
+Repeat the above work until get 9 Columns which means each button has a column contain the information of system response. Then the matrix A is given by:
+$$
+A = \begin{bmatrix} Col1 & Col2 &...& Col9\end{bmatrix} 
+$$
+Then the problem Ax = b has its precisely mean:
+A is the system response matrix that each column mapping a response of a button pushing operation. Vector x is our operation, and the element 1 means pushing the corresponding button. Vector b is the response after doing operation x. 
+
+\textbf{The responding of game system is the linear combination of button pushing operation.}   
+
+For checking, let push the first and last button which means
+$$x = [1,0,0,0,0,0,0,0,1]^{T}$$.
+$$
+b^{T} = (Ax)^{T} = \begin{bmatrix} 1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 1\end{bmatrix} 
+$$
+Reshape b into the lights matrix:
+$$
+LightsMatrix = \begin{bmatrix} 1 & 1 & 0 \\ 1 & 0 & 1 \\ 0 & 1 & 1\end{bmatrix} 
+$$
+\noindent 3. What is the strategy of the game?
+We know A is the response system assumed all lights is off. Consequently, A is our goal, b is the A after operation x, let b is the random lights matrix we have. Since the button just have two states, it is the same operation x to get A from b. Vector x is the strategy to turn the random b to the zero one.
+\\
+
+Example 1:
+
+$$
+LightsMatrix = \begin{bmatrix} 1 & 0 & 0 \\ 1 & 1 & 1 \\ 1 & 1 & 1\end{bmatrix} 
+$$ 
+Obviously, the solution vector is $$[0,0,0,1,0,0,0,0,1]^{T}$$.
+If we solve the problem Ax = b, where b is the vector by reshaping Lights Matrix.$$b = [1,0,0,1,1,1,1,1,1]$$
+The solution of Ax = b is $$x = [0,0,0,1,0,0,0,0,1]^{T}$$
+Hence, the solution of Ax = b is the solution of the game.
+
+\section*{ $\llcorner$  Chapter 2: Solving the Game $\urcorner$}
+
+\noindent1. Solvability Condition
+
+We can see that pattern maxtrix B, identitiy matrix I and zero matrix O is: $$B = B^T, I = I^T, O = O^T $$
+
+Which makes A transpose to equal A, and thus A is symmetric. In symmetrix matrices, like A, we can say that column space of A is equal to row space of the A. Other thing is, b matrix, our initial configuration should be in the column space of A if it is orthogonal to the null space of A. 
+
+We can show it by dot producting b with all the elements of the nullspace A to check
+if we get 0.
+
+In order to solve this problem we needed to use RREF where all the operations
+should had to be in modulo 2, where we needed to implement binary RREF.
+
+In RREF, we get matrices A and b, put them into augmented matrix, and reducing/eliminating only the first 25 column, where 26th column representing b, is exposed to only row operations. After that we seen that A has 2 free columns which makes rank of A 23. This means that we have 2 variable that we can assign values freely to obtain vectors forming the nullspace.
+
+[0,1,1,1,0,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1,0,1,1,0,0]'
+
+[1,0,1,0,1,1,0,1,0,1,0,0,0,0,0,1,0,1,0,1,1,0,1,0,0]'
+
+and then we give 1 and 0 to free variables
+
+n1 = [0,1,1,1,0,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1,0,1,1,1,0]'
+
+n2 = [1,0,1,0,1,1,0,1,0,1,0,0,0,0,0,1,0,1,0,1,1,0,1,0,1]'
+
+And we now have null space to check b against solvability. \\
+
+
+
+\noindent2. Solutions and Solving the Game
+
+
+We figured out that we can check b for solvability and accepting here x has a solution.
+
+However with 25x25 matrix A, rank(A)=23, we have 2 free free variables, providing 2 vectors to nullspace where we can find solutins with linear combination of them.
+
+$$A(x + a.n1 + b.n2) = b$$
+$$Ax + a.n1 + A.b.n2 = b$$
+$$Ax + 0 + 0 = b$$
+$$Ax = b$$
+a, b = 1, 0 n1,n2 belongs to N(A)
+
+So by the 2 vector we have 4 solutions to have
+$$x$$
+$$x + n1 $$
+$$x + n2 $$
+$$x + n1 +n2$$
+
+So to get one of the our solution we put A and b into augmented matrix and use our binary RREF. After the elimination, the 26th column of the augmented matrix is becomes the our strategy vector representing x.
+
+Finally we get a strategy of 25x1 matrix, where it can be think of a representation of a 5x5 game board, have values 1 representing pushes needed and 0 that not require any push.
+
+\end{document}
